@@ -1,6 +1,8 @@
 package Model;
 
-public class Client {
+import java.io.Serializable;
+
+public class Client implements Serializable {
 
         /** The id. */
         private int id;
@@ -22,6 +24,8 @@ public class Client {
 
         /** The client type. */
         private String clientType;
+
+    static final long serialVersionUID = 1;
 
         /**
          * Gets the id.

@@ -16,12 +16,11 @@ public class DBModel {
     /** The data file. */
     public String databaseName = "ClientManagementDB",
             tableName = "ClientTable",
-            dataFile = "C:\\Users\\vaibh\\Desktop\\MEng. Soft. Engg\\ENSF-593 and ENSF-594\\Programs\\Lab 8 - Client Management System\\src\\Model\\clients.txt";
-
+            dataFile = "/Users/computer/Desktop/ensf607softwaredesign/labs/lab2/exercise6/src/Model/clients.txt";
     /** The password. */
     public String connectionInfo = "jdbc:mysql://localhost:3306/?verifyServerCertificate=false&useSSL=true",
             login          = "root",
-            password       = "Vahbiav#469882";
+            password       = "helloworld";
 
     /** The model J list data. */
     //private ClientManagementView clientManagementView = new ClientManagementView();
@@ -171,10 +170,10 @@ public class DBModel {
      *
      * @param columnName the column name
      * @param value the value
-     * @param list the list
      * @return the cliend row
      */
-    public ArrayList<Client> getCliendRow(String columnName, String value, ArrayList<Client> list) {
+    public ArrayList<Client> getCliendRow(String columnName, String value) {
+        ArrayList<Client> list = new ArrayList<Client>();
         String sql = "SELECT * FROM " + tableName + " WHERE " + columnName + " =  ? ";
         try {
             preparedStatement = jdbc_connection.prepareStatement(sql);
@@ -193,7 +192,6 @@ public class DBModel {
             }
             this.modelJListData.clear();
             this.modelJListData = list;
-            //clientManagementView.setClientData(this.modelJListData);
         } catch(SQLException e) {
             e.printStackTrace();
         }

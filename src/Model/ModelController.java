@@ -51,6 +51,27 @@ public class ModelController implements Runnable {
                     clientHelper.setResponseNumber(1);
                     sendObject(clientHelper);
                 }
+                else if(clientHelper.getRequestNumber() == 1) {
+
+                    if(clientHelper.getClientList().get(0).getId() != 0) {
+                        boolean isUpdated = dbModel.updateClient(clientHelper.getClientList().get(0));
+                        if(isUpdated) {
+                            clientHelper.setClientList(dbModel.getClients());
+                            clientHelper.setResponseNumber(3);
+                            clientHelper.setSearchParameter("Client Information has been updated to the Database");
+                            sendObject(clientHelper);
+                        }
+                    }
+                    else {
+                        boolean isAdded = dbModel.addClient(clientHelper.getClientList().get(0));
+                        if(isAdded) {
+                            clientHelper.setClientList(dbModel.getClients());
+                            clientHelper.setResponseNumber(3);
+                            clientHelper.setSearchParameter("Client has been added to the Database");
+                            sendObject(clientHelper);
+                        }
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

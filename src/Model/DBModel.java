@@ -127,7 +127,7 @@ public class DBModel {
      *
      * @param model the model
      */
-    public void addClient(Client model) {
+    public boolean addClient(Client model) {
         String sql = "INSERT INTO " + tableName + "(FirstName, LastName, Address, PostalCode, PhoneNumber, ClientType)" +
                 " VALUES (?,?,?,?,?,?) ";
         try{
@@ -140,7 +140,9 @@ public class DBModel {
             preparedStatement.setString(6, model.getClientType());
             preparedStatement.executeUpdate();
             System.out.println("New client is added to the database");
+            return true;
         } catch(SQLException e) { e.printStackTrace(); }
+        return false;
     }
 
     /**
@@ -148,7 +150,7 @@ public class DBModel {
      *
      * @param model the model
      */
-    public void updateClient(Client model) {
+    public boolean updateClient(Client model) {
         String sql = "UPDATE " + tableName + " SET FirstName = ? , LastName = ? , Address = ? , " +
                 " PostalCode = ? , PhoneNumber = ? , ClientType = ? WHERE ID = ?";
         try{
@@ -162,7 +164,9 @@ public class DBModel {
             preparedStatement.setInt(7, model.getId());
             preparedStatement.executeUpdate();
             System.out.println("Client is updated to the database");
+            return true;
         } catch(SQLException e) { e.printStackTrace(); }
+        return false;
     }
 
     /**
@@ -178,6 +182,31 @@ public class DBModel {
         try {
             preparedStatement = jdbc_connection.prepareStatement(sql);
             preparedStatement.setString(1, value);
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()) {
+                Client model = new Client();
+                model.setId(rs.getInt("ID"));
+                model.setFirstName(rs.getString("FirstName"));
+                model.setLastName(rs.getString("LastName"));
+                model.setAddress(rs.getString("Address"));
+                model.setPostalCode(rs.getString("PostalCode"));
+                model.setPhoneNumber(rs.getString("PhoneNumber"));
+                model.setClientType(rs.getString("ClientType"));
+                list.add(model);
+            }
+            this.modelJListData.clear();
+            this.modelJListData = list;
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return this.modelJListData;
+    }
+
+    public ArrayList<Client> getClients() {
+        ArrayList<Client> list = new ArrayList<Client>();
+        String sql = "SELECT * FROM " + tableName;
+        try {
+            preparedStatement = jdbc_connection.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()) {
                 Client model = new Client();

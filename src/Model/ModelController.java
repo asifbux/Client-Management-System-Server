@@ -50,6 +50,10 @@ public class ModelController implements Runnable {
                     clientHelper.setClientList(dbModel.getCliendRow("ClientType", clientHelper.getSearchParameter()));
                     clientHelper.setResponseNumber(1);
                     sendObject(clientHelper);
+                } else if(clientHelper.getRequestNumber() == 2) {
+                    clientHelper.setClientList(dbModel.deleteClient(Integer.parseInt(clientHelper.getSearchParameter())));
+                    clientHelper.setResponseNumber(1);
+                    sendObject(clientHelper);
                 }
                 else if(clientHelper.getRequestNumber() == 1) {
 

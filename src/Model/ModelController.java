@@ -1,39 +1,48 @@
 package Model;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.net.SocketException;
 
+/**
+ * The type Model controller.
+ */
 public class ModelController implements Runnable {
 
     private ClientHelper clientHelper;
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
+    /**
+     * The Db model.
+     */
     public DBModel dbModel;
 
+    /**
+     * Instantiates a new Model controller.
+     *
+     * @param outputStream the output stream
+     * @param inputStream  the input stream
+     * @throws IOException            the io exception
+     * @throws ClassNotFoundException the class not found exception
+     */
     public ModelController(ObjectOutputStream outputStream, ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
         this.outputStream = outputStream;
         this.inputStream = inputStream;
         setupTheDB();
     }
 
+    /**
+     * Sets the db.
+     */
     public void setupTheDB() {
         dbModel = new DBModel();
-
-        // Save - make a call for update and add
-        //1. Requestnumber from client = 1 , if ( clientID == null) create and save
-        // else update
-        // serveReponse == 1 refresh list for all clients
-        // Delete - make a call to delete
-        // requestNumber = 2, delete and serverResponse == 1 refresh all clients
-        // search - make a call for search by client id name and type
-        // requestNumber 31 for CLient ID - serverResponse 1
-        // requestNumber 32 for Last Name - serverResponse 1
-        // requestNumber 33 for Client TYpe - serverResponse 1
-
     }
 
+    /**
+     * Run request.
+     */
     public void runRequest() {
         while(true) {
             try {
@@ -76,14 +85,35 @@ public class ModelController implements Runnable {
                         }
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (EOFException e) {
+                closeStream();
+            } catch (SocketException e){
+                closeStream();
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
+    /**
+     * Close stream.
+     */
+    public void closeStream()  {
+        try {
+            inputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Send object.
+     *
+     * @param aClientHelper the a client helper
+     */
     public void sendObject(ClientHelper aClientHelper) {
         aClientHelper = new ClientHelper(aClientHelper.getResponseNumber(), aClientHelper.getRequestNumber(), aClientHelper.getSearchParameter(), aClientHelper.getClientList());
         try {
@@ -92,8 +122,6 @@ public class ModelController implements Runnable {
             e.printStackTrace();
         }
     }
-
-
 
     @Override
     public void run() {

@@ -6,21 +6,44 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The type Db model.
+ */
 public class DBModel {
-    /** The jdbc connection. */
+    /**
+     * The jdbc connection.
+     */
     public Connection jdbc_connection;
 
-    /** The prepared statement. */
+    /**
+     * The prepared statement.
+     */
     public PreparedStatement preparedStatement;
 
-    /** The data file. */
+    /**
+     * The data file.
+     */
     public String databaseName = "ClientManagementDB",
-            tableName = "ClientTable",
-            dataFile = "/Users/computer/Desktop/ensf607softwaredesign/labs/lab2/exercise6/src/Model/clients.txt";
-    /** The password. */
+    /**
+     * The Table name.
+     */
+    tableName = "ClientTable",
+    /**
+     * The Data file.
+     */
+    dataFile = "/Users/computer/Desktop/ensf607softwaredesign/labs/lab2/exercise6/src/Model/clients.txt";
+    /**
+     * The password.
+     */
     public String connectionInfo = "jdbc:mysql://localhost:3306/?verifyServerCertificate=false&useSSL=true",
-            login          = "root",
-            password       = "helloworld";
+    /**
+     * The Login.
+     */
+    login          = "root",
+    /**
+     * The Password.
+     */
+    password       = "helloworld";
 
     /** The model J list data. */
     //private ClientManagementView clientManagementView = new ClientManagementView();
@@ -126,6 +149,7 @@ public class DBModel {
      * Adds the client.
      *
      * @param model the model
+     * @return the boolean
      */
     public boolean addClient(Client model) {
         String sql = "INSERT INTO " + tableName + "(FirstName, LastName, Address, PostalCode, PhoneNumber, ClientType)" +
@@ -149,6 +173,7 @@ public class DBModel {
      * Update client.
      *
      * @param model the model
+     * @return the boolean
      */
     public boolean updateClient(Client model) {
         String sql = "UPDATE " + tableName + " SET FirstName = ? , LastName = ? , Address = ? , " +
@@ -170,11 +195,11 @@ public class DBModel {
     }
 
     /**
-     * Gets the cliend row.
+     * Gets the client row.
      *
      * @param columnName the column name
-     * @param value the value
-     * @return the cliend row
+     * @param value      the value
+     * @return the client row
      */
     public ArrayList<Client> getCliendRow(String columnName, String value) {
         ArrayList<Client> list = new ArrayList<Client>();
@@ -202,6 +227,11 @@ public class DBModel {
         return this.modelJListData;
     }
 
+    /**
+     * Gets clients.
+     *
+     * @return the clients
+     */
     public ArrayList<Client> getClients() {
         ArrayList<Client> list = new ArrayList<Client>();
         String sql = "SELECT * FROM " + tableName;
@@ -248,26 +278,6 @@ public class DBModel {
         }
         return false;
     }
-
-//    public void updateModelList(int id) {
-//        for(int i = 0; i < this.modelJListData.size(); i++) {
-//            if(this.modelJListData.get(i).getId() == id) {
-//                this.modelJListData.remove(i);
-//                clientManagementView.setJList(this.modelJListData);
-//            }
-//        }
-//    }
-
-//    public void addOrUpdateClient() {
-//        ClientManagementModel model = new ClientManagementModel();
-//        //model = clientManagementView.getClientData(model);
-//        if(model.getId() != 0) {
-//            updateClient(model);
-//        } else {
-//            addClient(model);
-//        }
-//        clientManagementView.clearRightSideData();
-//    }
 
     /**
      * Delete client.
